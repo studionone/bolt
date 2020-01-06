@@ -2,7 +2,7 @@ FROM php:7.2-apache
 
 ENV TERM xterm-256color
 
-ARG NODE_VERSION=8.9.4
+ARG NODE_VERSION=12
 ARG BOLT_VERSION=3.7
 
 RUN apt-get update && apt-get install -y \
@@ -32,9 +32,8 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && composer self-update \
     && composer global require hirak/prestissimo
 
-RUN wget https://nodejs.org/download/release/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz -O /opt/node.tar.gz \
-    && cd /opt && tar -zxvf node.tar.gz && rm node.tar.gz && mv node-v${NODE_VERSION}-linux-x64 node \
-    && ln -s /opt/node/bin/node /usr/local/bin/node && ln -s /opt/node/bin/npm /usr/local/bin/npm
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+    && apt-get install -y nodejs
 
 WORKDIR /var/www
 RUN rm -rf html && composer create-project bolt/composer-install:^${BOLT_VERSION} html --prefer-dist --no-interaction

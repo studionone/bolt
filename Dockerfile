@@ -2,7 +2,7 @@ FROM php:7.2-apache
 
 ENV TERM xterm-256color
 
-ARG NODE_VERSION=8.9.4
+ARG NODE_VERSION=12
 ARG BOLT_VERSION=3.7
 
 RUN apt-get update && apt-get install -y \
@@ -32,8 +32,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && composer self-update \
     && composer global require hirak/prestissimo
 
-# Install current Node.js LTS (v8.x)
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && apt-get install -y nodejs
 
 WORKDIR /var/www
